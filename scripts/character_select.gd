@@ -10,13 +10,39 @@ func _ready():
 	_create_stats_panel()
 
 func _initialize_character_stats():
-	# Inicializar stats para los 20 personajes
+	# Inicializar stats para los 20 personajes con total de 250 puntos
+	# Diferentes distribuciones para cada personaje
+	var stat_distributions = [
+		{"vida": 80, "daño": 60, "defensa": 60, "velocidad": 50},    # 1
+		{"vida": 75, "daño": 65, "defensa": 55, "velocidad": 55},    # 2
+		{"vida": 70, "daño": 70, "defensa": 50, "velocidad": 60},    # 3
+		{"vida": 85, "daño": 55, "defensa": 65, "velocidad": 45},    # 4
+		{"vida": 90, "daño": 50, "defensa": 70, "velocidad": 40},    # 5
+		{"vida": 65, "daño": 75, "defensa": 55, "velocidad": 55},    # 6
+		{"vida": 60, "daño": 80, "defensa": 50, "velocidad": 60},    # 7
+		{"vida": 70, "daño": 65, "defensa": 60, "velocidad": 55},    # 8
+		{"vida": 95, "daño": 45, "defensa": 75, "velocidad": 35},    # 9
+		{"vida": 55, "daño": 85, "defensa": 45, "velocidad": 65},    # 10
+		{"vida": 75, "daño": 70, "defensa": 55, "velocidad": 50},    # 11
+		{"vida": 80, "daño": 55, "defensa": 70, "velocidad": 45},    # 12
+		{"vida": 65, "daño": 80, "defensa": 50, "velocidad": 55},    # 13
+		{"vida": 70, "daño": 60, "defensa": 65, "velocidad": 55},    # 14
+		{"vida": 85, "daño": 65, "defensa": 50, "velocidad": 50},    # 15
+		{"vida": 60, "daño": 75, "defensa": 60, "velocidad": 55},    # 16
+		{"vida": 90, "daño": 55, "defensa": 65, "velocidad": 40},    # 17
+		{"vida": 70, "daño": 70, "defensa": 55, "velocidad": 55},    # 18
+		{"vida": 75, "daño": 60, "defensa": 70, "velocidad": 45},    # 19
+		{"vida": 50, "daño": 90, "defensa": 45, "velocidad": 65},    # 20
+	]
+	
 	for i in range(1, 21):
+		var dist = stat_distributions[i - 1]
 		character_stats[i] = {
-			"vida": 80 + (i * 3),  # 83-143
-			"daño": 50 + (i * 2),  # 52-102
-			"defensa": 40 + (i * 2),  # 42-92
-			"velocidad": 60 + i  # 61-80
+			"vida": dist["vida"],
+			"daño": dist["daño"],
+			"defensa": dist["defensa"],
+			"velocidad": dist["velocidad"],
+			"total": 250
 		}
 
 func _create_character_slots():
@@ -89,10 +115,11 @@ func _create_stats_panel():
 	}
 	
 	for stat in stats:
-		# Label del stat
+		# Label del stat con valor
 		var stat_label = Label.new()
-		stat_label.text = stat.to_upper()
-		stat_label.add_theme_font_size_override("font_size", 14)
+		stat_label.name = "Label_%s" % stat
+		stat_label.text = stat.to_upper() + ": 0/250"
+		stat_label.add_theme_font_size_override("font_size", 12)
 		vbox.add_child(stat_label)
 		
 		# ProgressBar
@@ -133,21 +160,22 @@ func _update_stats_display(character_id: int):
 		return
 	
 	var stats = character_stats[character_id]
+	var total = stats["total"]
 	
-	# Actualizar barras de progreso con manejo de errores
-	var progress_vida = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_vida")
-	var progress_daño = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_daño")
-	var progress_defensa = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_defensa")
-	var progress_velocidad = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_velocidad")
+	# Actualizar barras de progreso con valores del personaje
+	var stat_names = ["vida", "daño", "defensa", "velocidad"]
 	
-	if progress_vida:
-		progress_vida.value = (stats["vida"] / 200.0) * 100
-	if progress_daño:
-		progress_daño.value = (stats["daño"] / 150.0) * 100
-	if progress_defensa:
-		progress_defensa.value = (stats["defensa"] / 120.0) * 100
-	if progress_velocidad:
-		progress_velocidad.value = (stats["velocidad"] / 100.0) * 100
+	for stat_name in stat_names:
+		var label = stats_panel.get_node_or_null("VBoxContainer/Label_%s" % stat_name)
+		var progress = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_%s" % stat_name)
+		
+		if label:
+			var value = stats[stat_name]
+			label.text = stat_name.to_upper() + ": %d/%d" % [value, total]
+		
+		if progress:
+			var value = stats[stat_name]
+			progress.value = (value / float(total)) * 100
 
 func _process(delta):
 	# ESC para volver al menú
