@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b1t1wdvpt6ypm"]
+[gd_scene load_steps=3 format=3 uid="uid://b1t1wdvpt6ypm"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_2bq2u"]
+[ext_resource type="Theme" uid="uid://c5qvwvyxz8lvl" path="res://theme.tres" id="2_theme"]
 
 [node name="MainMenu" type="Control"]
 layout_mode=3
@@ -10,6 +11,14 @@ anchor_bottom=1.0
 grow_horizontal=2
 grow_vertical=2
 script=ExtResource("1_2bq2u")
+theme=ExtResource("2_theme")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode=1
+anchors_preset=15
+anchor_right=1.0
+anchor_bottom=1.0
+color=Color(0.15, 0.15, 0.2, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode=1
@@ -18,37 +27,42 @@ anchor_left=0.5
 anchor_top=0.5
 anchor_right=0.5
 anchor_bottom=0.5
-offset_left=-100.0
-offset_top=-100.0
-offset_right=100.0
-offset_bottom=100.0
+offset_left=-150.0
+offset_top=-150.0
+offset_right=150.0
+offset_bottom=150.0
 grow_horizontal=2
 grow_vertical=2
 alignment=1
+theme_override_constants/separation=20
 
 [node name="Title" type="Label" parent="VBoxContainer"]
 layout_mode=2
 text="FIGHTING GAME 2D"
 theme_override_font_sizes/font_size=48
+horizontal_alignment=1
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 layout_mode=2
-theme_override_constants/margin_top=20
+theme_override_constants/margin_top=30
 
 [node name="PlayButton" type="Button" parent="VBoxContainer"]
 layout_mode=2
 text="JUGAR"
-theme_override_font_sizes/font_size=24
+theme_override_font_sizes/font_size=32
+custom_minimum_size=Vector2(300, 60)
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
 layout_mode=2
 text="OPCIONES"
-theme_override_font_sizes/font_size=24
+theme_override_font_sizes/font_size=32
+custom_minimum_size=Vector2(300, 60)
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 layout_mode=2
 text="SALIR"
-theme_override_font_sizes/font_size=24
+theme_override_font_sizes/font_size=32
+custom_minimum_size=Vector2(300, 60)
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_pressed"]
