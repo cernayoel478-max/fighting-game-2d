@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b1t1wdvpt6ypm"]
+[gd_scene load_steps=2 format=3 uid="uid://b1t1wdvpt6ypm"]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_2bq2u"]
-[ext_resource type="Theme" uid="uid://c5qvwvyxz8lvl" path="res://theme.tres" id="2_theme"]
 
 [node name="MainMenu" type="Control"]
 layout_mode=3
@@ -11,7 +10,6 @@ anchor_bottom=1.0
 grow_horizontal=2
 grow_vertical=2
 script=ExtResource("1_2bq2u")
-theme=ExtResource("2_theme")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode=1
