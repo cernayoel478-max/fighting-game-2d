@@ -1,23 +1,17 @@
-; Engine configuration file.
-; It's best edited using the editor UI and not directly,
-; since the parameters that go here are lost when created again.
+[gd_project]
 
 config_version=5
+
+_global_script_classes=[]
+_global_script_class_icons={}
 
 [application]
 
 config/name="Fighting Game 2D"
-config/description="Juego de peleas en 2D tipo Brawlhalla con mecánicas de Mortal Kombat"
+config/features=PackedStringArray("4.2")
+config/icon="res://icon.svg"
 run/main_scene="res://scenes/main_menu.tscn"
-config/features=PackedStringArray("4.2", "vulkan")
-config/icon="res://assets/icon.svg"
 
 [physics]
 
-2d/physics_engine="GodotPhysics2D"
-2d/default_gravity=980
-
-[rendering]
-
-textures/canvas_textures/default_texture_filter=1
-renderer/rendering_method="gl_compatibility"
+physics_engine="GodotPhysics2D"
