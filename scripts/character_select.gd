@@ -63,9 +63,14 @@ func _create_stats_panel():
 	
 	# Crear VBox para los stats
 	var vbox = VBoxContainer.new()
+	vbox.name = "VBoxContainer"
 	vbox.anchor_right = 1.0
 	vbox.anchor_bottom = 1.0
-	vbox.add_theme_constant_override("separation", 20)
+	vbox.add_theme_constant_override("separation", 15)
+	vbox.add_theme_constant_override("margin_left", 10)
+	vbox.add_theme_constant_override("margin_right", 10)
+	vbox.add_theme_constant_override("margin_top", 10)
+	vbox.add_theme_constant_override("margin_bottom", 10)
 	
 	# Título
 	var title = Label.new()
@@ -94,6 +99,8 @@ func _create_stats_panel():
 		var progress = ProgressBar.new()
 		progress.name = "ProgressBar_%s" % stat
 		progress.custom_minimum_size = Vector2(200, 20)
+		progress.min_value = 0
+		progress.max_value = 100
 		progress.value = 50
 		progress.modulate = stat_colors[stat]
 		vbox.add_child(progress)
@@ -118,20 +125,29 @@ func _on_character_slot_hover(slot: Panel, is_hover: bool, character_id: int):
 		slot.modulate = Color(0.3, 0.3, 0.35, 1)
 
 func _update_stats_display(character_id: int):
+	if not has_node("StatsPanel"):
+		return
+	
 	var stats_panel = get_node("StatsPanel")
+	if not stats_panel.has_node("VBoxContainer"):
+		return
+	
 	var stats = character_stats[character_id]
 	
-	# Actualizar barras de progreso
-	var progress_vida = stats_panel.get_node("VBoxContainer/ProgressBar_vida")
-	var progress_daño = stats_panel.get_node("VBoxContainer/ProgressBar_daño")
-	var progress_defensa = stats_panel.get_node("VBoxContainer/ProgressBar_defensa")
-	var progress_velocidad = stats_panel.get_node("VBoxContainer/ProgressBar_velocidad")
+	# Actualizar barras de progreso con manejo de errores
+	var progress_vida = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_vida")
+	var progress_daño = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_daño")
+	var progress_defensa = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_defensa")
+	var progress_velocidad = stats_panel.get_node_or_null("VBoxContainer/ProgressBar_velocidad")
 	
-	# Normalizar valores (0-100)
-	progress_vida.value = (stats["vida"] / 200.0) * 100
-	progress_daño.value = (stats["daño"] / 150.0) * 100
-	progress_defensa.value = (stats["defensa"] / 120.0) * 100
-	progress_velocidad.value = (stats["velocidad"] / 100.0) * 100
+	if progress_vida:
+		progress_vida.value = (stats["vida"] / 200.0) * 100
+	if progress_daño:
+		progress_daño.value = (stats["daño"] / 150.0) * 100
+	if progress_defensa:
+		progress_defensa.value = (stats["defensa"] / 120.0) * 100
+	if progress_velocidad:
+		progress_velocidad.value = (stats["velocidad"] / 100.0) * 100
 
 func _process(delta):
 	# ESC para volver al menú
