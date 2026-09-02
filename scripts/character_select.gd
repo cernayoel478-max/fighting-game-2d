@@ -1,5 +1,7 @@
 extends Control
 
+var selected_character = 0
+
 func _ready():
 	print("Menú de selección de personajes cargado")
 	_create_character_slots()
@@ -12,6 +14,7 @@ func _create_character_slots():
 		var character_slot = Panel.new()
 		character_slot.custom_minimum_size = Vector2(100, 100)
 		character_slot.modulate = Color(0.3, 0.3, 0.35, 1)
+		character_slot.name = "Character_%d" % i
 		
 		# Crear un label con el número
 		var label = Label.new()
@@ -30,6 +33,25 @@ func _create_character_slots():
 		
 		character_slot.add_child(label)
 		grid.add_child(character_slot)
+		
+		# Conectar señales
+		character_slot.gui_input.connect(_on_character_slot_clicked.bindv([i]))
+		character_slot.mouse_entered.connect(_on_character_slot_hover.bindv([character_slot, true]))
+		character_slot.mouse_exited.connect(_on_character_slot_hover.bindv([character_slot, false]))
+
+func _on_character_slot_clicked(event: InputEvent, character_id: int):
+	if event is InputEventMouseButton and event.pressed:
+		print("Personaje %d seleccionado" % character_id)
+		selected_character = character_id
+		get_tree().change_scene_to_file("res://scenes/battle_arena.tscn")
+
+func _on_character_slot_hover(slot: Panel, is_hover: bool):
+	if is_hover:
+		# Efecto hover - más claro
+		slot.modulate = Color(0.5, 0.5, 0.55, 1)
+	else:
+		# Volver al color original
+		slot.modulate = Color(0.3, 0.3, 0.35, 1)
 
 func _process(delta):
 	# ESC para volver al menú
